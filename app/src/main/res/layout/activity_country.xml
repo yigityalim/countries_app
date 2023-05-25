@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,97 +7,220 @@
     android:padding="16dp"
     tools:context=".CountryActivity">
 
-    <ImageView
-        android:id="@+id/flagImageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/rounded"
-        android:clipToOutline="true"
-        android:scaleType="centerCrop" />
-
     <LinearLayout
-        android:padding="10dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/countryNameTextView"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/progressBar"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/countryLinearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:textColor="#000"
-            android:textSize="40sp"
-            android:textStyle="bold" />
-        <ImageView
-            android:id="@+id/coatOfArmsImageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:scaleType="fitCenter" />
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/flagImageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/rounded"
+                android:scaleType="fitCenter"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/countryNameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_weight="1"
+                    android:textColor="#000"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/coatOfArmsImageView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/commonNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#111"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/capitalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="#222"
+                android:textSize="24sp"
+                android:text="Başkent Yok"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bölge: "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/regionTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alt Bölge: "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/subregionTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/languageTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/languageTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Para Birimi: "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/currencyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nüfus: "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/populationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/timezonesLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/timezonesTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zaman Dilimleri:"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/timezonesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Haftanın Başlangıcı: "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/startOfWeekTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bilinmiyor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/backButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/arrow_back"
+                android:text="Geri"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/capitalTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="#222"
-        android:textSize="28sp" />
-
-    <TextView
-        android:id="@+id/regionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/subregionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/languageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/currencyTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/populationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/timezonesTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="16sp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/backButton"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:drawableStart="@drawable/arrow_back"
-        android:text="Geri"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-</LinearLayout>
+</ScrollView>
