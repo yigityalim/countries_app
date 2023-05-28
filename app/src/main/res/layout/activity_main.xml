@@ -29,13 +29,21 @@
             android:text="Ülke Seçiniz :"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="(Performans Kaybı ve Çökmeler yüzünden kaldırıldı)"
+            android:id="@+id/countryEditText"
+            android:layout_marginBottom="16dp"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <ListView
         android:id="@+id/countryListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.countries_app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.palette.graphics.Palette;
 
@@ -12,8 +13,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,12 +50,13 @@ public class CountryActivity extends AppCompatActivity {
         binding = ActivityCountryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.backButton.setOnClickListener(v -> onBackPressed());
+        // binding.scrollView.getBackground().setAlpha(76);
         String name = getIntent().getStringExtra("name");
         url += name;
         apiTalep(url);
     }
 
-    private int getTextColorForBackground(int backgroundColor) {
+    protected int getTextColorForBackground(int backgroundColor) {
         double luminance = (0.299 * Color.red(backgroundColor) + 0.587 * Color.green(backgroundColor) + 0.114 * Color.blue(backgroundColor)) / 255;
         if (luminance > 0.5) {
             return Color.BLACK;
@@ -84,6 +88,8 @@ public class CountryActivity extends AppCompatActivity {
         try {
             JSONArray root = new JSONArray(jsonCevabi);
             JSONObject countryJO = root.getJSONObject(0);
+
+            // Bayrak ve armalar
             String flags = countryJO.getJSONObject("flags").getString("png");
             String coatOfArms = countryJO.getJSONObject("coatOfArms").getString("png");
             loadFlag(flags, coatOfArms);
@@ -103,7 +109,7 @@ public class CountryActivity extends AppCompatActivity {
                 }
 
                 String engName = nameObject.getString("common");
-                binding.commonNameTextView.setText("(" + convertToUTF8(engName) + ")");
+                binding.commonNameTextView.setText(convertToUTF8(engName));
             } else {
                 if (nameObject.has("common")) {
                     String ulkeIsmi = nameObject.getString("common");
@@ -144,6 +150,7 @@ public class CountryActivity extends AppCompatActivity {
                 if (languages.length() == 1) {
                     binding.languageTitleTextView.setText("Konuşulan Dil: ");
                 } else {
+                    binding.languageLinearLayout.setOrientation(LinearLayout.VERTICAL);
                     binding.languageTitleTextView.setText("Konuşulan Diller: ");
                 }
                 binding.languageTextView.setText(languagesText);
@@ -201,36 +208,89 @@ public class CountryActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private String convertToUTF8(@NonNull String input) {
-        byte[] isoBytes = input.getBytes(StandardCharsets.ISO_8859_1);
-        return new String(isoBytes, StandardCharsets.UTF_8);
+    protected String convertToUTF8(@NonNull String input) {
+        return new String(input.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
     }
 
-    public void loadFlag(String png, String coatOfArms) {
+
+    protected void loadFlag(String png, String coatOfArms) {
         Picasso.get().load(coatOfArms).into(binding.coatOfArmsImageView);
         Picasso.get().load(png).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 binding.flagImageView.setImageBitmap(bitmap);
+                float ratio = (float) bitmap.getWidth() / bitmap.getHeight();
+                if (ratio >= 1.0f) {
+                    binding.flagImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                } else {
+                    binding.flagImageView.setScaleType(ImageView.ScaleType.FIT_START);
+                }
+
                 Palette.from(bitmap).generate(palette -> {
                     if (palette != null) {
                         Palette.Swatch backgroundSwatch = palette.getDominantSwatch();
                         if (backgroundSwatch != null) {
                             int textColor = getTextColorForBackground(backgroundSwatch.getRgb());
-                            binding.backButton.setBackgroundTintList(ColorStateList.valueOf(backgroundSwatch.getRgb()));
-                            binding.backButton.setTextColor(textColor);
+                            int backgroundColor = ColorUtils.blendARGB(backgroundSwatch.getRgb(), textColor, 0.2f);
 
-                            Drawable[] drawables = binding.backButton.getCompoundDrawablesRelative();
-                            Drawable startDrawable = drawables[0];
-                            if (startDrawable != null) {
-                                startDrawable = DrawableCompat.wrap(startDrawable);
-                                DrawableCompat.setTint(startDrawable, textColor);
-                                binding.backButton.setCompoundDrawablesRelativeWithIntrinsicBounds(startDrawable, null, null, null);
-                            }
+                            updateButtonAppearance(backgroundSwatch.getRgb(), textColor);
+                            updateStatusBarColor(backgroundColor);
+                            updateScrollViewBackground(backgroundColor);
+                            setTextColorForBackground(backgroundSwatch.getRgb());
                         }
                     }
                 });
             }
+
+            private void updateButtonAppearance(int backgroundColor, int textColor) {
+                binding.backButton.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
+                binding.backButton.setTextColor(textColor);
+
+                Drawable[] drawables = binding.backButton.getCompoundDrawablesRelative();
+                Drawable startDrawable = drawables[0];
+                if (startDrawable != null) {
+                    startDrawable = DrawableCompat.wrap(startDrawable);
+                    DrawableCompat.setTint(startDrawable, textColor);
+                    binding.backButton.setCompoundDrawablesRelativeWithIntrinsicBounds(startDrawable, null, null, null);
+                }
+            }
+
+            private void updateStatusBarColor(int color) {
+                getWindow().setStatusBarColor(color);
+            }
+
+            private void updateScrollViewBackground(int color) {
+                binding.scrollView.setBackgroundColor(color);
+            }
+
+            private void setTextColorForBackground(int backgroundColor) {
+                int textColor = getTextColorForBackground(backgroundColor);
+
+                TextView[] textViews = {
+                        binding.countryNameTextView,
+                        binding.commonNameTextView,
+                        binding.capitalTextView,
+                        binding.regionTitleTextView,
+                        binding.regionTextView,
+                        binding.subregionTitleTextView,
+                        binding.subregionTextView,
+                        binding.languageTitleTextView,
+                        binding.languageTextView,
+                        binding.currencyTitleTextView,
+                        binding.currencyTextView,
+                        binding.populationTitleTextView,
+                        binding.populationTextView,
+                        binding.timezonesTitleTextView,
+                        binding.timezonesTextView,
+                        binding.startOfWeekTitleTextView,
+                        binding.startOfWeekTextView
+                };
+
+                for (TextView textView : textViews) {
+                    textView.setTextColor(textColor);
+                }
+            }
+
 
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
@@ -241,4 +301,5 @@ public class CountryActivity extends AppCompatActivity {
             }
         });
     }
+
 }

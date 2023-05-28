@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CountryAdapter extends ArrayAdapter<Country> {
     private final Context context;
-    private final List<Country> countryList;
+    private List<Country> countryList;
 
     public CountryAdapter(Context context, List<Country> countryList) {
         super(context, 0, countryList);
@@ -39,4 +39,10 @@ public class CountryAdapter extends ArrayAdapter<Country> {
 
         return listItemView;
     }
+
+    public void filterList(List<Country> filteredList) {
+        countryList = filteredList;
+        notifyDataSetChanged();
+    }
+
 }
